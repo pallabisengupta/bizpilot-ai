@@ -1,0 +1,83 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    container_name: bizpilot_backend
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      APP_ENV: local
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: bizpilot_ai
+      DB_USERNAME: bizpilot
+      DB_PASSWORD: secret
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
+    networks:
+      - bizpilot
+
+  queue:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    container_name: bizpilot_queue
+    working_dir: /var/www/html
+    command: ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - backend
+      - mysql
+      - redis
+    networks:
+      - bizpilot
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: bizpilot_nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+    networks:
+      - bizpilot
+
+  mysql:
+    image: mysql:8.4
+    container_name: bizpilot_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: bizpilot_ai
+      MYSQL_USER: bizpilot
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root_secret
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - bizpilot
+
+  redis:
+    image: redis:7-alpine
+    container_name: bizpilot_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - bizpilot
+
+networks:
+  bizpilot:
+    driver: bridge
+
+volumes:
+  mysql_data:
