@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 const navItems = [
   { label: 'Admin Overview', to: '/admin', icon: LayoutDashboard },
   { label: 'Plans', to: '/admin/plans', icon: CreditCard },
+  { label: 'Subscriptions', to: '/admin/subscriptions', icon: BarChart3 },
   { label: 'Tenants', to: '/admin/tenants', icon: Building2 },
-  { label: 'Analytics', to: '/admin', icon: BarChart3 },
 ];
 
 export function AdminSidebar() {

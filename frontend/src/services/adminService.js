@@ -21,6 +21,21 @@ export const adminService = {
     return data;
   },
 
+  async subscriptions() {
+    const { data } = await apiClient.get('/admin/subscriptions');
+    return data;
+  },
+
+  async markSubscriptionPaid(id) {
+    const { data } = await apiClient.post(`/admin/subscriptions/${id}/mark-paid`);
+    return data.data;
+  },
+
+  async cancelSubscription(id) {
+    const { data } = await apiClient.post(`/admin/subscriptions/${id}/cancel`);
+    return data.data;
+  },
+
   async activateTenant(id) {
     const { data } = await apiClient.post(`/admin/tenants/${id}/activate`);
     return data.data;

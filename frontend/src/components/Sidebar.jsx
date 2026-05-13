@@ -1,6 +1,7 @@
 import {
   Bot,
   CalendarClock,
+  CreditCard,
   LayoutDashboard,
   MessageCircle,
   Settings,
@@ -14,6 +15,7 @@ const navItems = [
   { label: 'Connections', to: '/connections', icon: MessageCircle },
   { label: 'Schedules', to: '/schedules', icon: CalendarClock },
   { label: 'Leads', to: '/leads', icon: UsersRound },
+  { label: 'Subscription', to: '/subscription', icon: CreditCard },
   { label: 'Settings', to: '/onboarding', icon: Settings },
 ];
 

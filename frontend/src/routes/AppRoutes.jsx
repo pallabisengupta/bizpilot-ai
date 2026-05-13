@@ -10,9 +10,11 @@ import { SchedulesPage } from '../pages/SchedulesPage';
 import { LeadsPage } from '../pages/LeadsPage';
 import { AiContentPage } from '../pages/AiContentPage';
 import { SocialConnectionsPage } from '../pages/SocialConnectionsPage';
+import { SubscriptionPage } from '../pages/SubscriptionPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
 import { AdminPlansPage } from '../pages/admin/AdminPlansPage';
 import { AdminTenantsPage } from '../pages/admin/AdminTenantsPage';
+import { AdminSubscriptionsPage } from '../pages/admin/AdminSubscriptionsPage';
 import { AuthGuard, GuestGuard } from './AuthGuard';
 import { AdminGuard } from './AdminGuard';
 
@@ -32,6 +34,7 @@ export function AppRoutes() {
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/plans" element={<AdminPlansPage />} />
             <Route path="/admin/tenants" element={<AdminTenantsPage />} />
+            <Route path="/admin/subscriptions" element={<AdminSubscriptionsPage />} />
           </Route>
         </Route>
 
@@ -41,6 +44,7 @@ export function AppRoutes() {
           <Route path="/connections" element={<SocialConnectionsPage />} />
           <Route path="/schedules" element={<SchedulesPage />} />
           <Route path="/leads" element={<LeadsPage />} />
+          <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/onboarding" element={<OnboardingPage />} />
         </Route>
       </Route>
