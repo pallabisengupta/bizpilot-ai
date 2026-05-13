@@ -8,9 +8,12 @@ use App\Http\Controllers\Api\V1\Auth\RegisteredUserController;
 use App\Http\Controllers\Api\V1\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\V1\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Api\V1\Admin\AdminPlanController;
+use App\Http\Controllers\Api\V1\Admin\AdminSubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\AdminTenantController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\PublicPlanController;
 use App\Http\Controllers\Api\V1\ScheduleController;
+use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\TenantController;
 use App\Http\Controllers\Api\V1\TenantOnboardingController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +28,8 @@ Route::prefix('v1')
                 'version' => 'v1',
             ]);
         })->name('health');
+
+        Route::get('/plans', [PublicPlanController::class, 'index'])->name('plans.public');
 
         Route::prefix('auth')
             ->name('auth.')
@@ -52,6 +57,9 @@ Route::prefix('v1')
                 ->group(function (): void {
                     Route::get('/analytics', AdminAnalyticsController::class)->name('analytics');
                     Route::apiResource('plans', AdminPlanController::class)->except(['show']);
+                    Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions.index');
+                    Route::post('/subscriptions/{subscription}/mark-paid', [AdminSubscriptionController::class, 'markPaid'])->name('subscriptions.mark-paid');
+                    Route::post('/subscriptions/{subscription}/cancel', [AdminSubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
                     Route::get('/tenants', [AdminTenantController::class, 'index'])->name('tenants.index');
                     Route::post('/tenants/{tenant}/activate', [AdminTenantController::class, 'activate'])->name('tenants.activate');
                     Route::post('/tenants/{tenant}/suspend', [AdminTenantController::class, 'suspend'])->name('tenants.suspend');
@@ -83,6 +91,9 @@ Route::prefix('v1')
                 Route::post('/leads/{lead}/assign', [LeadController::class, 'assign'])->name('leads.assign');
                 Route::post('/leads/{lead}/notes', [LeadController::class, 'note'])->name('leads.notes');
                 Route::get('/leads/{lead}/activities', [LeadController::class, 'activities'])->name('leads.activities');
+
+                Route::get('/subscription', [SubscriptionController::class, 'current'])->name('subscription.current');
+                Route::post('/subscription/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
 
                 Route::get('/tenants/{tenant}', [TenantController::class, 'show'])->name('tenants.show');
                 Route::put('/tenants/{tenant}', [TenantController::class, 'update'])->name('tenants.update');
