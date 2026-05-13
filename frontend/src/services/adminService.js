@@ -1,0 +1,33 @@
+import apiClient from './apiClient';
+
+export const adminService = {
+  async analytics() {
+    const { data } = await apiClient.get('/admin/analytics');
+    return data.data;
+  },
+
+  async plans() {
+    const { data } = await apiClient.get('/admin/plans');
+    return data;
+  },
+
+  async createPlan(payload) {
+    const { data } = await apiClient.post('/admin/plans', payload);
+    return data.data;
+  },
+
+  async tenants() {
+    const { data } = await apiClient.get('/admin/tenants');
+    return data;
+  },
+
+  async activateTenant(id) {
+    const { data } = await apiClient.post(`/admin/tenants/${id}/activate`);
+    return data.data;
+  },
+
+  async suspendTenant(id) {
+    const { data } = await apiClient.post(`/admin/tenants/${id}/suspend`);
+    return data.data;
+  },
+};

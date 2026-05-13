@@ -10,9 +10,9 @@ import { NavLink } from 'react-router-dom';
 
 const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
-  { label: 'AI Content', to: '/dashboard', icon: Bot },
+  { label: 'AI Content', to: '/ai-content', icon: Bot },
+  { label: 'Connections', to: '/connections', icon: MessageCircle },
   { label: 'Schedules', to: '/schedules', icon: CalendarClock },
-  { label: 'WhatsApp', to: '/dashboard', icon: MessageCircle },
   { label: 'Leads', to: '/leads', icon: UsersRound },
   { label: 'Settings', to: '/onboarding', icon: Settings },
 ];
