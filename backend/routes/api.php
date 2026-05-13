@@ -6,6 +6,9 @@ use App\Http\Controllers\Api\V1\Auth\NewPasswordController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Api\V1\Auth\RegisteredUserController;
 use App\Http\Controllers\Api\V1\Auth\VerifyEmailController;
+use App\Http\Controllers\Api\V1\Admin\AdminAnalyticsController;
+use App\Http\Controllers\Api\V1\Admin\AdminPlanController;
+use App\Http\Controllers\Api\V1\Admin\AdminTenantController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\ScheduleController;
 use App\Http\Controllers\Api\V1\TenantController;
@@ -43,6 +46,17 @@ Route::prefix('v1')
             });
 
         Route::middleware('auth:sanctum')->group(function (): void {
+            Route::prefix('admin')
+                ->name('admin.')
+                ->middleware('super_admin')
+                ->group(function (): void {
+                    Route::get('/analytics', AdminAnalyticsController::class)->name('analytics');
+                    Route::apiResource('plans', AdminPlanController::class)->except(['show']);
+                    Route::get('/tenants', [AdminTenantController::class, 'index'])->name('tenants.index');
+                    Route::post('/tenants/{tenant}/activate', [AdminTenantController::class, 'activate'])->name('tenants.activate');
+                    Route::post('/tenants/{tenant}/suspend', [AdminTenantController::class, 'suspend'])->name('tenants.suspend');
+                });
+
             Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');
             Route::post('/tenants', [TenantController::class, 'store'])->name('tenants.store');
 
