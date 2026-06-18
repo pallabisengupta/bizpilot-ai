@@ -27,7 +27,7 @@ class SubscriptionService
         return $this->subscriptions->activeForTenant($tenant);
     }
 
-    public function subscribe(Tenant $tenant, Plan $plan): Subscription
+    public function subscribe(Tenant $tenant, Plan $plan, array $metadata = []): Subscription
     {
         if (! $plan->is_active) {
             throw ValidationException::withMessages([
@@ -62,7 +62,7 @@ class SubscriptionService
                 'metadata' => [
                     'provider' => 'manual',
                     'source' => 'admin_platform_mvp',
-                ],
+                ] + $metadata,
             ]);
 
             $tenant->forceFill([

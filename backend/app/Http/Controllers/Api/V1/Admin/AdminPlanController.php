@@ -13,7 +13,12 @@ class AdminPlanController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        return PlanResource::collection(Plan::query()->orderBy('sort_order')->paginate(25));
+        return PlanResource::collection(
+            Plan::query()
+                ->with('product')
+                ->orderBy('sort_order')
+                ->paginate(25)
+        );
     }
 
     public function store(PlanRequest $request): JsonResponse

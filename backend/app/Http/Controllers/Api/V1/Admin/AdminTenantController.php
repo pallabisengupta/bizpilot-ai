@@ -15,6 +15,8 @@ class AdminTenantController extends Controller
     {
         return TenantResource::collection(
             Tenant::query()
+                ->with(['plan', 'users', 'latestSubscription.plan'])
+                ->withCount(['users', 'leads', 'schedules'])
                 ->when($request->query('status'), fn ($query, $status) => $query->where('status', $status))
                 ->latest()
                 ->paginate((int) $request->integer('per_page', 25)),

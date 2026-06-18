@@ -1,17 +1,21 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Api\V1\Auth\CheckEmailController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Api\V1\Auth\NewPasswordController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Api\V1\Auth\RegisteredUserController;
 use App\Http\Controllers\Api\V1\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\V1\Admin\AdminAnalyticsController;
+use App\Http\Controllers\Api\V1\Admin\AdminPlanFeatureController;
 use App\Http\Controllers\Api\V1\Admin\AdminPlanController;
+use App\Http\Controllers\Api\V1\Admin\AdminProductController;
 use App\Http\Controllers\Api\V1\Admin\AdminSubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\AdminTenantController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\PublicPlanController;
+use App\Http\Controllers\Api\V1\PublicProductController;
 use App\Http\Controllers\Api\V1\ScheduleController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use App\Http\Controllers\Api\V1\TenantController;
@@ -30,10 +34,13 @@ Route::prefix('v1')
         })->name('health');
 
         Route::get('/plans', [PublicPlanController::class, 'index'])->name('plans.public');
+        Route::get('/products', [PublicProductController::class, 'index'])->name('products.public');
+        Route::get('/products/{url}/plans', [PublicPlanController::class, 'product'])->name('products.plans.public');
 
         Route::prefix('auth')
             ->name('auth.')
             ->group(function (): void {
+                Route::post('/check-email', CheckEmailController::class)->name('check-email');
                 Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
                 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
                 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
@@ -56,6 +63,8 @@ Route::prefix('v1')
                 ->middleware('super_admin')
                 ->group(function (): void {
                     Route::get('/analytics', AdminAnalyticsController::class)->name('analytics');
+                    Route::apiResource('products', AdminProductController::class)->except(['show']);
+                    Route::apiResource('plan-features', AdminPlanFeatureController::class)->except(['show']);
                     Route::apiResource('plans', AdminPlanController::class)->except(['show']);
                     Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions.index');
                     Route::post('/subscriptions/{subscription}/mark-paid', [AdminSubscriptionController::class, 'markPaid'])->name('subscriptions.mark-paid');
@@ -94,6 +103,8 @@ Route::prefix('v1')
 
                 Route::get('/subscription', [SubscriptionController::class, 'current'])->name('subscription.current');
                 Route::post('/subscription/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
+                Route::post('/subscription/checkout', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
+                Route::post('/subscription/verify', [SubscriptionController::class, 'verify'])->name('subscription.verify');
 
                 Route::get('/tenants/{tenant}', [TenantController::class, 'show'])->name('tenants.show');
                 Route::put('/tenants/{tenant}', [TenantController::class, 'update'])->name('tenants.update');

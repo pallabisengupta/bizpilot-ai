@@ -8,15 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('plans', function (Blueprint $table): void {
+        Schema::create('plan_features', function (Blueprint $table): void {
             $table->id();
-            $table->string('name', 100);
-            $table->string('slug', 100)->unique();
+            $table->string('name', 150);
+            $table->string('slug', 150)->unique();
             $table->text('description')->nullable();
-            $table->unsignedInteger('price_amount')->default(0);
-            $table->char('currency', 3)->default('INR');
-            $table->string('billing_interval', 20)->default('monthly');
-            $table->json('features')->nullable();
             $table->boolean('is_active')->default(true)->index();
             $table->unsignedInteger('sort_order')->default(0)->index();
             $table->timestamps();
@@ -25,6 +21,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('plans');
+        Schema::dropIfExists('plan_features');
     }
 };

@@ -17,6 +17,7 @@ class PlanRequest extends FormRequest
         $planId = $this->route('plan')?->id ?? $this->route('plan');
 
         return [
+            'product_id' => ['required', 'integer', Rule::exists('products', 'id')],
             'name' => ['required', 'string', 'max:100'],
             'slug' => ['required', 'string', 'max:100', 'alpha_dash:ascii', Rule::unique('plans', 'slug')->ignore($planId)],
             'description' => ['nullable', 'string', 'max:5000'],
@@ -24,6 +25,7 @@ class PlanRequest extends FormRequest
             'currency' => ['required', 'string', 'size:3'],
             'billing_interval' => ['required', Rule::in(['monthly', 'yearly'])],
             'features' => ['nullable', 'array'],
+            'features.*' => ['string', 'max:150'],
             'is_active' => ['boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ];

@@ -11,6 +11,13 @@ class PlanResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'product_id' => $this->product_id,
+            'product' => $this->whenLoaded('product', fn () => $this->product ? [
+                'id' => $this->product->id,
+                'name' => $this->product->name,
+                'slug' => $this->product->slug,
+                'url' => $this->product->url,
+            ] : null),
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
