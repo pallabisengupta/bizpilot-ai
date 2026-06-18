@@ -6,6 +6,11 @@ export const authService = {
     return data.data;
   },
 
+  async checkEmail(email) {
+    const { data } = await apiClient.post('/auth/check-email', { email });
+    return data.data;
+  },
+
   async register(payload) {
     const { data } = await apiClient.post('/auth/register', payload);
     return data.data;

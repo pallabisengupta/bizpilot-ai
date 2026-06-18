@@ -13,8 +13,15 @@ export function LoginPage() {
   const location = useLocation();
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const searchParams = new URLSearchParams(location.search);
+  const nextPath = searchParams.get('next');
+  const emailParam = searchParams.get('email') || '';
+  const guardedPath = location.state?.from
+    ? `${location.state.from.pathname}${location.state.from.search || ''}`
+    : null;
+  const registerSearch = location.search || (guardedPath ? `?next=${encodeURIComponent(guardedPath)}` : '');
   const { values, handleChange } = useForm({
-    email: '',
+    email: emailParam,
     password: '',
     device_name: 'Web browser',
   });
@@ -26,7 +33,7 @@ export function LoginPage() {
 
     try {
       await login(values);
-      navigate(location.state?.from?.pathname || '/dashboard', { replace: true });
+      navigate(nextPath || guardedPath || '/dashboard', { replace: true });
     } catch (requestError) {
       setError(getErrorMessage(requestError));
     } finally {
@@ -70,7 +77,7 @@ export function LoginPage() {
 
       <p className="mt-5 text-center text-sm text-subtle">
         New to BizPilot AI?{' '}
-        <Link className="font-semibold text-brand" to="/register">Create an account</Link>
+        <Link className="font-semibold text-brand" to={`/register${registerSearch}`}>Create an account</Link>
       </p>
     </Card>
   );

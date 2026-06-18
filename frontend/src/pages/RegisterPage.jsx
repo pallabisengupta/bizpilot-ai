@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
@@ -10,11 +10,16 @@ import { useState } from 'react';
 export function RegisterPage() {
   const { register } = useApp();
   const navigate = useNavigate();
+  const location = useLocation();
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const searchParams = new URLSearchParams(location.search);
+  const nextPath = searchParams.get('next');
+  const emailParam = searchParams.get('email') || '';
+  const loginSearch = location.search || (nextPath ? `?next=${encodeURIComponent(nextPath)}` : '');
   const { values, handleChange } = useForm({
     name: '',
-    email: '',
+    email: emailParam,
     password: '',
     password_confirmation: '',
     device_name: 'Web browser',
@@ -27,7 +32,7 @@ export function RegisterPage() {
 
     try {
       await register(values);
-      navigate('/onboarding', { replace: true });
+      navigate(nextPath || '/dashboard', { replace: true });
     } catch (requestError) {
       setError(getErrorMessage(requestError));
     } finally {
@@ -64,7 +69,7 @@ export function RegisterPage() {
 
       <p className="mt-5 text-center text-sm text-subtle">
         Already have an account?{' '}
-        <Link className="font-semibold text-brand" to="/login">Login</Link>
+        <Link className="font-semibold text-brand" to={`/login${loginSearch}`}>Login</Link>
       </p>
     </Card>
   );

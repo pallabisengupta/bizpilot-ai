@@ -14,9 +14,11 @@ export function AuthGuard() {
 
 export function GuestGuard() {
   const { isAuthenticated } = useApp();
+  const location = useLocation();
+  const nextPath = new URLSearchParams(location.search).get('next');
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to={nextPath || '/dashboard'} replace />;
   }
 
   return <Outlet />;

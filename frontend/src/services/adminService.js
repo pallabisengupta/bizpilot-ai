@@ -11,13 +11,33 @@ export const adminService = {
     return data;
   },
 
+  async products() {
+    const { data } = await apiClient.get('/admin/products');
+    return data;
+  },
+
+  async createProduct(payload) {
+    const { data } = await apiClient.post('/admin/products', payload);
+    return data.data.product;
+  },
+
+  async planFeatures() {
+    const { data } = await apiClient.get('/admin/plan-features');
+    return data;
+  },
+
+  async createPlanFeature(payload) {
+    const { data } = await apiClient.post('/admin/plan-features', payload);
+    return data.data.feature;
+  },
+
   async createPlan(payload) {
     const { data } = await apiClient.post('/admin/plans', payload);
     return data.data;
   },
 
-  async tenants() {
-    const { data } = await apiClient.get('/admin/tenants');
+  async tenants(params = {}) {
+    const { data } = await apiClient.get('/admin/tenants', { params });
     return data;
   },
 

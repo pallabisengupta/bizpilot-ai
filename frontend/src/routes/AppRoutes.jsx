@@ -4,6 +4,7 @@ import { AppLayout } from '../layouts/AppLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
+import { PricingPage } from '../pages/PricingPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { OnboardingPage } from '../pages/OnboardingPage';
 import { SchedulesPage } from '../pages/SchedulesPage';
@@ -11,6 +12,8 @@ import { LeadsPage } from '../pages/LeadsPage';
 import { AiContentPage } from '../pages/AiContentPage';
 import { SocialConnectionsPage } from '../pages/SocialConnectionsPage';
 import { SubscriptionPage } from '../pages/SubscriptionPage';
+import { CartPage } from '../pages/CartPage';
+import { CheckoutPage } from '../pages/CheckoutPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
 import { AdminPlansPage } from '../pages/admin/AdminPlansPage';
 import { AdminTenantsPage } from '../pages/admin/AdminTenantsPage';
@@ -21,6 +24,9 @@ import { AdminGuard } from './AdminGuard';
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/pricing/:productUrl" element={<PricingPage />} />
+
       <Route element={<GuestGuard />}>
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
@@ -45,6 +51,8 @@ export function AppRoutes() {
           <Route path="/schedules" element={<SchedulesPage />} />
           <Route path="/leads" element={<LeadsPage />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/onboarding" element={<OnboardingPage />} />
         </Route>
       </Route>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
@@ -11,6 +11,7 @@ import { getErrorMessage } from '../utils/errors';
 
 export function OnboardingPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setTenant } = useApp();
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,6 +24,7 @@ export function OnboardingPage() {
     timezone: 'UTC',
     language: 'en',
   });
+  const nextPath = new URLSearchParams(location.search).get('next');
 
   useEffect(() => {
     tenantService.getOnboarding()
@@ -69,7 +71,7 @@ export function OnboardingPage() {
     try {
       const data = await tenantService.completeOnboarding(values);
       setTenant(data.tenant);
-      navigate('/dashboard', { replace: true });
+      navigate(nextPath || '/dashboard', { replace: true });
     } catch (requestError) {
       setError(getErrorMessage(requestError));
     } finally {
